@@ -6,6 +6,11 @@
 # Last Updated: 2021/08/26
 #
 # https://github.com/yoshisatoh/nasdaq/tree/main/NTS/Alerts_XML/AlertsExport.py
+#
+# Note:
+# This AlertsExport.py file has to be saved on the same directory as the AlertsExport directory is located.
+# Then execute this script on your Command Prompt (Windows) or Terminal (MacOS) as follows:
+# python AlertsExport.py
 
 
 # import library
