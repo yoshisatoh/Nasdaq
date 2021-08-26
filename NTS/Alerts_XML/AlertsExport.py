@@ -1,7 +1,8 @@
 #  (C) 2021, Yoshimasa Satoh, CFA 
 #
 #  All rights reserved.
-
+#
+# https://github.com/yoshisatoh/nasdaq/tree/main/NTS/Alerts_XML/AlertsExport.py
 
 
 # import library
