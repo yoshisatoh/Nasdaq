@@ -25,6 +25,8 @@
 #
 # If it is successful, the following files will be created:
 # (market).(yyyymmdd).alerts.csv
+# (market).all.alerts.csv    -    An aggregated file of all the (market).(yyyymmdd).alerts.csv files
+# (market).all.alerts.counts.csv    -    Alert counts for each alert
 # (market).png    -    a bar chart (x: date, y: total alertCount per day)
 # summary.markets.csv    -    (market), (yyyymmdd), (total alertCount per day)
 # summary.markets.market.csv    -    (market)
@@ -41,6 +43,8 @@ import pandas as pd
 import datetime
 import numpy as np
 import sys
+import glob
+import os
 
 
 
@@ -194,7 +198,7 @@ for n in range(len(datelst)):
     # Pull the root (topmost) element of the tree
     root = tree.getroot()
     #
-    # Create summary.total.csv file for: alertCount (total alert count for a specified period)
+    # Create (market).(yyyymmdd).alerts.csv files
     with open(mkt + '.' + str(datelst[n]) + '.alerts.csv', 'w', newline='') as f:
         writer = csv.writer(f)
         #
@@ -209,8 +213,9 @@ for n in range(len(datelst)):
         # title:             dir1.find("title").text
         # security:          dir1.find("sources").find("source").find("target").find("primaryTarget").find("security").text
         #
-        # add column names
+        ##### adding column names
         writer.writerow(["alert_id", "market", "date", "alertCount", "time", "title", "security"])
+        #####
         #
         numofalert = 0
         #
@@ -232,8 +237,76 @@ for n in range(len(datelst)):
                 continue
             else:
                 writer.writerow([dir1.attrib['id'], dir1.attrib['id'].split('-')[0], datetime.datetime.strptime(dir1.attrib['id'].split('-')[1], '%Y%m%d').date(), dir1.attrib['id'].split('-')[2], dir1.find("alertTime").text.split('T')[1].split('+')[0], dir1.find("title").text, dir1.find("sources").find("source").find("target").find("primaryTarget").find("security").text])
+                #
+                #print(dir1.tag)
+                #
+                #print(dir1.attrib)
+                #{'id': 'asx-20210730-96'}
+                #
+                #print(dir1.attrib['id'])
+                #asx-20210730-96
+                #
+                #########
+                #print(dir1.find("participants").find("house").text)
+                #print(dir1.find("participants").find("house").attrib['marketCode'])
+                #
+                #print(dir1.find("parameters").find("item").attrib)
+                #print(dir1.find("parameters").find("item").attrib['key'])
+                #print(dir1.find("parameters").find("item").attrib['value'])
+                #
+                #print(dir1.find("attributes").find("item").attrib)
+                #print(dir1.find("attributes").find("item").attrib['key'])
+                #print(dir1.find("attributes").find("item").attrib['value'])
+                #########
             #
 #
 #print(f.closed)
 #True
 #
+
+
+
+
+#################### Merging all the (market).(yyyymmdd).alerts.csv files into (market).all.alerts.csv, and then create (market).all.alerts.csv ####################
+
+#Deleting an old file: (market).all.alerts.csv
+os.remove(mkt + '.' + 'all' + '.alerts.csv')
+
+#Load all the files: (market).(yyyymmdd).alerts.csv
+files = glob.glob(mkt + '.' + '*' + '.alerts.csv')
+
+# Create (market).all.alerts.csv file
+with open(mkt + '.' + 'all' + '.alerts.csv', 'w', newline='') as f_new:
+    #
+    ##### adding column names
+    writer = csv.writer(f_new)
+    writer.writerow(["alert_id", "market", "date", "alertCount", "time", "title", "security"])
+    #####
+    #
+    for f in files:
+        with open(f, 'r', newline='') as f_org:
+            #
+            #Skipping header (first row)
+            header = next(f_org)
+            #
+            f_new.write(f_org.read())
+#
+#print(f.closed)
+#True
+#
+
+
+mkt_all_alerts = pd.read_csv(mkt + '.' + 'all' + '.alerts.csv')
+#
+#print(mkt_all_alerts['title'].value_counts())
+#print(type(mkt_all_alerts['title'].value_counts()))
+#
+mkt_all_alerts['title'].value_counts().to_csv(mkt + '.' + 'all' + '.alerts.counts.csv', header=True, index=True)
+#
+mkt_all_alerts_counts = pd.read_csv(mkt + '.' + 'all' + '.alerts.counts.csv')
+#
+#print(mkt_all_alerts_counts)
+#print(pd.DataFrame(mkt_all_alerts_counts))
+#print(pd.DataFrame(mkt_all_alerts_counts).iloc[:,0])
+#print(pd.DataFrame(mkt_all_alerts_counts).iloc[:,1])
+
