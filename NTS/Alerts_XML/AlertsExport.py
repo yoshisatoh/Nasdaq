@@ -3,7 +3,7 @@
 #  All rights reserved.
 #
 # Created:      2021/08/26
-# Last Updated: 2021/08/30
+# Last Updated: 2021/08/31
 #
 # https://github.com/yoshisatoh/nasdaq/tree/main/NTS/Alerts_XML/AlertsExport.py
 #
@@ -19,7 +19,9 @@
 # python AlertsExport.py
 
 
-# import library
+
+
+#################### import library ####################
 import xml.etree.ElementTree as ET
 import csv
 import matplotlib.pyplot as plt
@@ -27,6 +29,7 @@ import pandas as pd
 import datetime
 import numpy as np
 import sys
+
 
 
 
@@ -42,32 +45,17 @@ tree = ET.parse('AlertsExport/summary.xml')
 root = tree.getroot()
 
 
-
 ########## Creating summary.total.csv (total alert count)
 # Create summary.total.csv file for: alertCount (total alert count for a specified period)
 with open('summary.total.csv', 'w', newline='') as f:
     writer = csv.writer(f)
     writer.writerow([root.find('total/alertCount').text])
     total_alertCount = root.find('total/alertCount').text
-    #
-    #writer.writerow([root.tag])
-    #writer.writerow([root.attrib])
-    #for dir1 in root:
-        #writer.writerow([dir1.tag])
-        #writer.writerow([dir1.attrib])
-        #writer.writerow([dir1.find("alertCount")])
-        #
-        #for dir2 in dir1:
-            #writer.writerow([dir2.tag])
-            #print(root.find('total/alertCount').text)
-            #writer.writerow([dir2.attrib])
-            #
 #
 #print(f.closed)
 #True
 #
 #print(total_alertCount)
-
 
 
 ########## Creating summary.markets.csv (market, yyyymmdd, daily alert count)
@@ -78,12 +66,15 @@ with open('summary.markets.csv', 'w', newline='') as f:
     for dir1 in root:
         for dir2 in dir1:
             for dir3 in dir2:
-                #writer.writerow([dir3.attrib["date"], dir3.find("alertCount").text])
+                #
+                # market:     dir2.attrib["marketCode"]
+                # date:       dir3.attrib["date"]
+                # alertCount: dir3.find("alertCount").text
+                #
                 writer.writerow([dir2.attrib["marketCode"], dir3.attrib["date"], dir3.find("alertCount").text])
 #
 #print(f.closed)
 #True
-
 
 
 # Check the generated summary.markets.csv file
@@ -97,11 +88,10 @@ with open('summary.markets.csv', 'r') as f:
 #True
 
 
-
 # Load summary.markets.csv
 summarydt = pd.read_csv('summary.markets.csv', names=('market', 'date', 'alertCount'))
-#df1 = pd.DataFrame(summarydt)
 df1 = pd.DataFrame(summarydt)
+#
 #print(df1)
 '''
   market      date  alertCount
@@ -114,28 +104,27 @@ df1 = pd.DataFrame(summarydt)
 
 ########## Creating summary.markets.market.csv (market)
 # Extract all the markets
-#print(df1.iloc[:, 0].unique())
-#print(type(df1.iloc[:, 0].unique()))
-#<class 'numpy.ndarray'>
 df2 = pd.DataFrame(df1.iloc[:, 0].unique())
 #print(df2)
+#print(type(df2))
+#
 df2.to_csv('summary.markets.market.csv', header=False, index=False)
 ls2 = list(pd.read_csv('summary.markets.market.csv'))
 #
 #print(ls2)
-#['asx']
+#['(market)']
 #
 #print(len(ls2))
+#
 ln2 = len(ls2)
 print(ln2)
 #1
 #
 #print(ls2[0])
-#asx
+#'(market)'
 #
 #print(type(ls2[0]))
 #<class 'str'>
-
 
 
 ########## Creating (market).png (x: day, y: daily alert count)
@@ -143,18 +132,11 @@ print(ln2)
 #
 for n in range(ln2):
     #
-    #print(df1.query('market == "asx"'))
-    #
-    #print(df1[df1['market'] == 'asx'])
     print(df1[df1['market'] == ls2[n]])
     #
-    #X = list(df1.iloc[:, 1])
     X = list(df1['date'])
-    #print(type(df1['date']))
-    #<class 'pandas.core.series.Series'>
     X = pd.to_datetime(X, format='%Y%m%d')
     #
-    #Y = list(df1.iloc[:, 2])
     Y = list(df1['alertCount'])
     #
     # Plot the data using bar() method
@@ -174,26 +156,21 @@ for n in range(ln2):
 
 
 
-
-
 #################### AlertsExport/(market)/(yyyymmdd)/alerts.xml ####################
 
 #print(ls2[0])
-#asx
-mkt = str(ls2[0])
-print(mkt)
+#'(market)'
 
-print(df1)
-print(type(df1))
+mkt = str(ls2[0])
+#print(mkt)
+
+#print(df1)
+#print(type(df1))
 #
 #Delete dates with no alert
 df1nz = df1[df1['alertCount'] != 0]
 #
-#print(df1['date'])
 datelst = list(df1nz['date'])
-#print(datelst)
-#print(len(datelst))
-#print(datelst[0])
 
 
 ########## Creating (market).(yyyymmdd).alerts.csv (alert id, market, date, alertTime, alert title)
@@ -209,50 +186,25 @@ for n in range(len(datelst)):
     with open(mkt + '.' + str(datelst[n]) + '.alerts.csv', 'w', newline='') as f:
         writer = csv.writer(f)
         #
+        # writer.writerow([dir1.attrib['id'], dir1.attrib['id'].split('-')[0], datetime.datetime.strptime(dir1.attrib['id'].split('-')[1], '%Y%m%d').date(), dir1.attrib['id'].split('-')[2], dir1.find("alertTime").text.split('T')[1].split('+')[0], dir1.find("title").text, dir1.find("sources").find("source").find("target").find("primaryTarget").find("security").text])
+        #
+        # (column name):     (xml)
+        # alert_id:          dir1.attrib['id']
+        # market:            dir1.attrib['id'].split('-')[0]
+        # date(yyyy-mm-dd):  datetime.datetime.strptime(dir1.attrib['id'].split('-')[1], '%Y%m%d').date()
+        # alertCount:        dir1.attrib['id'].split('-')[2]
+        # time(HH:mm:ss.sss):dir1.find("alertTime").text.split('T')[1].split('+')[0]
+        # title:             dir1.find("title").text
+        # security:          dir1.find("sources").find("source").find("target").find("primaryTarget").find("security").text
+        #
+        # add column names
+        writer.writerow(["alert_id", "market", "date", "alertCount", "time", "title", "security"])
+        #
         numofalert = 0
         #
         for dir1 in root:
             #
-            #print(len(root))
-            #number of the alerts
-            #
-            #print(dir1)
-            #for dir2 in dir1:
-                #
-                #
-            #writer.writerow([dir1.attrib['id'], dir1.find("title").text])
-            #
-            #print(type(dir1.attrib['id']))
-            #<class 'str'>
-            #
-            #print(dir1.attrib['id'].split('-'))
-            #['(market)', '(yyyymmdd)', '(id)']
-            #
-            #print(dir1.attrib['id'].split('-')[0])
-            #'(market)'
-            #
-            #print(dir1.attrib['id'].split('-')[1])
-            #'(yyyymmdd)'
-            #print(type(dir1.attrib['id'].split('-')[1]))
-            #<class 'str'>
-            #
-            #print(datetime.datetime.strptime(dir1.attrib['id'].split('-')[1], '%Y%m%d'))
-            #'(YYYY-mm-dd HH:mm:ss)'
-            #
-            #print(datetime.datetime.strptime(dir1.attrib['id'].split('-')[1], '%Y%m%d').date())
-            #'(YYYY-mm-dd)'
-            #
-            #print(dir1.attrib['id'].split('-')[2])
-            #'(id)'
-            #
-            #writer.writerow([dir1.attrib['id'], dir1.attrib['id'].split('-')[0], dir1.attrib['id'].split('-')[1], dir1.attrib['id'].split('-')[2], dir1.find("title").text])
-            #
             numofalert = numofalert + 1
-            #print(numofalert)
-            #
-            #The last alert in a day, AFTER PROCESSING COMPLETE (HOUSE), will be ignored as it does not have security code.
-            #if numofalert == len(root):
-            #    break
             #
             ##########
             # The following alerts are skipped as it does not have security code:
@@ -268,25 +220,6 @@ for n in range(len(datelst)):
                 continue
             else:
                 writer.writerow([dir1.attrib['id'], dir1.attrib['id'].split('-')[0], datetime.datetime.strptime(dir1.attrib['id'].split('-')[1], '%Y%m%d').date(), dir1.attrib['id'].split('-')[2], dir1.find("alertTime").text.split('T')[1].split('+')[0], dir1.find("title").text, dir1.find("sources").find("source").find("target").find("primaryTarget").find("security").text])
-            #
-            #else:
-                #
-                #writer.writerow([dir1.attrib['id'], dir1.attrib['id'].split('-')[0], datetime.datetime.strptime(dir1.attrib['id'].split('-')[1], '%Y%m%d').date(), dir1.attrib['id'].split('-')[2], dir1.find("alertTime").text.split('T')[1].split('+')[0], dir1.find("title").text])
-                #
-                #print([dir1.find("sources").text])
-                #print([dir1.find("sources")])
-                #print([dir1.find("sources").find("source").text])
-                #print([dir1.find("sources").find("source").find("market").text])
-                #print([dir1.find("sources").find("source").find("target").text])
-                #print([dir1.find("sources").find("source").find("target").find("primaryTarget")])
-                #print([dir1.find("sources").find("source").find("target").find("primaryTarget").find("security").text])
-                #
-                #writer.writerow([dir1.attrib['id'], dir1.attrib['id'].split('-')[0], datetime.datetime.strptime(dir1.attrib['id'].split('-')[1], '%Y%m%d').date(), dir1.attrib['id'].split('-')[2], dir1.find("alertTime").text.split('T')[1].split('+')[0], dir1.find("title").text, dir1.find("sources").find("source").find("target").find("primaryTarget").find("security").text])
-            #
-            #writer.writerow([dir1.attrib['id'], dir1.attrib['id'].split('-')[0], datetime.datetime.strptime(dir1.attrib['id'].split('-')[1], '%Y%m%d').date(), dir1.attrib['id'].split('-')[2], dir1.find("alertTime").text.split('T')[1].split('+')[0], dir1.find("title").text])
-            ##writer.writerow([dir1.attrib['id'], dir1.attrib['id'].split('-')[0], datetime.datetime.strptime(dir1.attrib['id'].split('-')[1], '%Y%m%d').date(), dir1.attrib['id'].split('-')[2], dir1.find("alertTime").text.split('T')[1].split('+')[0], dir1.find("title").text, dir1.find("sources").find("source").find("target").find("primaryTarget").find("security").text])
-            #print([dir1.find("sources").find("source").find("target").find("primaryTarget").find("security").text])
-            #
             #
 #
 #print(f.closed)
