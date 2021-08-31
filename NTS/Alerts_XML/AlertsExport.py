@@ -24,7 +24,7 @@
 # python AlertsExport.py
 #
 # If it is successful, the following files will be created:
-# (market).(yyyymmdd).alerts.csv
+# (market).(yyyymmdd).alerts.csv    -    Details of alerts for each day
 # (market).all.alerts.csv    -    An aggregated file of all the (market).(yyyymmdd).alerts.csv files
 # (market).all.alerts.counts.csv    -    Alert counts for each alert
 # (market).png    -    a bar chart (x: date, y: total alertCount per day)
@@ -82,12 +82,13 @@ with open('summary.markets.csv', 'w', newline='') as f:
     for dir1 in root:
         for dir2 in dir1:
             for dir3 in dir2:
-                #
+                #####
                 # market:     dir2.attrib["marketCode"]
                 # date:       dir3.attrib["date"]
                 # alertCount: dir3.find("alertCount").text
                 #
                 writer.writerow([dir2.attrib["marketCode"], dir3.attrib["date"], dir3.find("alertCount").text])
+                #####
 #
 #print(f.closed)
 #True
@@ -202,6 +203,7 @@ for n in range(len(datelst)):
     with open(mkt + '.' + str(datelst[n]) + '.alerts.csv', 'w', newline='') as f:
         writer = csv.writer(f)
         #
+        #####
         # writer.writerow([dir1.attrib['id'], dir1.attrib['id'].split('-')[0], datetime.datetime.strptime(dir1.attrib['id'].split('-')[1], '%Y%m%d').date(), dir1.attrib['id'].split('-')[2], dir1.find("alertTime").text.split('T')[1].split('+')[0], dir1.find("title").text, dir1.find("sources").find("source").find("target").find("primaryTarget").find("security").text])
         #
         # (column name):     (xml)
@@ -223,12 +225,12 @@ for n in range(len(datelst)):
             #
             numofalert = numofalert + 1
             #
-            ##########
+            #####
             # The following alerts are skipped as it does not have security code:
             #
             # NEW PRICE HIGH ON LAST TRADING DAY OF MONTH SUMMARY (HOUSE)
             # AFTER PROCESSING COMPLETE (HOUSE)
-            ##########
+            #####
             if dir1.find("title").text == "NEW PRICE HIGH ON LAST TRADING DAY OF MONTH SUMMARY (HOUSE)":
                 #break
                 continue
@@ -246,7 +248,7 @@ for n in range(len(datelst)):
                 #print(dir1.attrib['id'])
                 #asx-20210730-96
                 #
-                #########
+                #####
                 #print(dir1.find("participants").find("house").text)
                 #print(dir1.find("participants").find("house").attrib['marketCode'])
                 #
@@ -257,7 +259,7 @@ for n in range(len(datelst)):
                 #print(dir1.find("attributes").find("item").attrib)
                 #print(dir1.find("attributes").find("item").attrib['key'])
                 #print(dir1.find("attributes").find("item").attrib['value'])
-                #########
+                #####
             #
 #
 #print(f.closed)
