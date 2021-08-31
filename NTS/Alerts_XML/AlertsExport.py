@@ -11,13 +11,24 @@
 #
 # Notes:
 #
-# First off, download AlertsExport.zip from your Nasdaq Trade Surveillance website. For example, the URL goes like this:
-# https://<yourorganisation>.smartsbroker.com/cmss/citadel/exportAlerts?marketCode=asx&date=20210 730&bundle=true&apiVersion=8&lookbackDays=6
+# First off, download an AlertsExport.zip file from a Nasdaq Trade Surveillance website for your company.
+# For example, a zip file can be downloaded by using the following URL.
+# https://<yourorganisation>.smartsbroker.com/cmss/citadel/exportAlerts?marketCode=asx&date=20210730&bundle=true&apiVersion=8&lookbackDays=6
 #
-# This AlertsExport.py file has to be saved on the same directory as the AlertsExport directory is located.
+# Second, unzip the AlertsExport.zip file on your computer. An AlertsExport directory will be created.
+#
+# Third, save this AlertsExport.py file to a directory where the AlertsExport directory is created.
+# (This py file and the AlertsExport directory need to be saved on the same directory.
 # 
-# Then execute this script on your Command Prompt (Windows) or Terminal (MacOS) as follows:
+# Finally, execute this script on your Command Prompt (Windows) or Terminal (MacOS) as follows.
 # python AlertsExport.py
+#
+# If it is successful, the following files will be created:
+# (market).(yyyymmdd).alerts.csv
+# (market).png    -    a bar chart (x: date, y: total alertCount per day)
+# summary.markets.csv    -    (market), (yyyymmdd), (total alertCount per day)
+# summary.markets.market.csv    -    (market)
+# summary.total.csv    -    (total alertCount for a specific period of time - if you use an example URL above, that covers from 24th July 2021 to 30th July 2021, i.e., 7 = 6+1 calendar days)
 
 
 
