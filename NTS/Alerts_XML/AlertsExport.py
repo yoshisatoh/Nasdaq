@@ -3,7 +3,7 @@
 #  All rights reserved.
 #
 # Created:      2021/08/26
-# Last Updated: 2021/08/31
+# Last Updated: 2021/09/01
 #
 # Github:
 # https://github.com/yoshisatoh/nasdaq/tree/main/NTS/Alerts_XML/AlertsExport.py
