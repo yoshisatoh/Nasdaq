@@ -299,6 +299,7 @@ with open(mkt + '.' + 'all' + '.alerts.csv', 'w', newline='') as f_new:
 
 
 # Sorting (mkt).all.alerts.csv by using the keys "date" and "alertCount"
+#
 mkt_all_alerts = pd.read_csv(mkt + '.' + 'all' + '.alerts.csv')
 #
 #print(mkt_all_alerts)
@@ -308,6 +309,8 @@ mkt_all_alerts = mkt_all_alerts.sort_values(by=["date", "alertCount"], ascending
 mkt_all_alerts.to_csv(mkt + '.' + 'all' + '.alerts.csv', index=False)
 
 
+# Creating (mkt).all.alerts.counts.csv - aggregated alert counts for each alert during a specified period of time
+#
 #print(mkt_all_alerts['title'].value_counts())
 #print(type(mkt_all_alerts['title'].value_counts()))
 #
