@@ -1,4 +1,4 @@
-#  (C) 2021, Yoshimasa Satoh, CFA 
+#  (C) 2021, Yoshimasa (Yoshi) Satoh, CFA 
 #
 #  All rights reserved.
 #
@@ -26,7 +26,7 @@
 # If it is successful, the following files will be created:
 # (market).(yyyymmdd).alerts.csv    -    Details of alerts for each day
 # (market).all.alerts.csv    -    An aggregated file of all the (market).(yyyymmdd).alerts.csv files
-# (market).all.alerts.counts.csv    -    Alert counts for each alert
+# (market).all.alerts.counts.csv    -    Aggregated alert counts for each alert during a specified period of time
 # (market).png    -    a bar chart (x: date, y: total alertCount per day)
 # summary.markets.csv    -    (market), (yyyymmdd), (total alertCount per day)
 # summary.markets.market.csv    -    (market)
@@ -269,7 +269,7 @@ for n in range(len(datelst)):
 
 
 
-#################### Merging all the (market).(yyyymmdd).alerts.csv files into (market).all.alerts.csv, and then create (market).all.alerts.csv ####################
+#################### Merging all the (market).(yyyymmdd).alerts.csv files into (market).all.alerts.csv, and then create (market).all.alerts.counts.csv ####################
 
 #Deleting an old file: (market).all.alerts.csv
 os.remove(mkt + '.' + 'all' + '.alerts.csv')
@@ -298,8 +298,16 @@ with open(mkt + '.' + 'all' + '.alerts.csv', 'w', newline='') as f_new:
 #
 
 
+# Sorting (mkt).all.alerts.csv by using the keys "date" and "alertCount"
 mkt_all_alerts = pd.read_csv(mkt + '.' + 'all' + '.alerts.csv')
 #
+#print(mkt_all_alerts)
+#print(mkt_all_alerts.sort_values(by=["date", "alertCount"], ascending=[True, True]))
+#
+mkt_all_alerts = mkt_all_alerts.sort_values(by=["date", "alertCount"], ascending=[True, True])
+mkt_all_alerts.to_csv(mkt + '.' + 'all' + '.alerts.csv', index=False)
+
+
 #print(mkt_all_alerts['title'].value_counts())
 #print(type(mkt_all_alerts['title'].value_counts()))
 #
