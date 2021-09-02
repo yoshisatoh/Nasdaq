@@ -330,7 +330,7 @@ with open(mkt + '.' + 'all' + '.alerts.csv', 'w', newline='') as f_new:
     #
     ##### adding column names
     writer = csv.writer(f_new)
-    writer.writerow(["alert_id", "market", "date", "alertCount", "time", "title", "security", "house"])
+    writer.writerow(["alert_id", "market", "date", "alertCount", "time", "title", "security", "house", "trader", "account_ref"])
     #####
     #
     for f in files:
