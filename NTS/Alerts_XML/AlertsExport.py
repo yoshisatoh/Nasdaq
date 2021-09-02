@@ -3,7 +3,7 @@
 #  All rights reserved.
 #
 # Created:      2021/08/26
-# Last Updated: 2021/09/01
+# Last Updated: 2021/09/02
 #
 # Github:
 # https://github.com/yoshisatoh/nasdaq/tree/main/NTS/Alerts_XML/AlertsExport.py
@@ -214,9 +214,12 @@ for n in range(len(datelst)):
         # time(HH:mm:ss.sss):dir1.find("alertTime").text.split('T')[1].split('+')[0]
         # title:             dir1.find("title").text
         # security:          dir1.find("sources").find("source").find("target").find("primaryTarget").find("security").text
+        # partcipants>house: dir1.find("participants").find("house").text
+        # partcipants>trader: dir1.find("participants").find("trader").text
+        # partcipants>account>ref: dir1.find("participants").find("account").find("ref").text
         #
         ##### adding column names
-        writer.writerow(["alert_id", "market", "date", "alertCount", "time", "title", "security"])
+        writer.writerow(["alert_id", "market", "date", "alertCount", "time", "title", "security", "house", "trader", "account_ref"])
         #####
         #
         numofalert = 0
@@ -238,27 +241,72 @@ for n in range(len(datelst)):
                 #break
                 continue
             else:
-                writer.writerow([dir1.attrib['id'], dir1.attrib['id'].split('-')[0], datetime.datetime.strptime(dir1.attrib['id'].split('-')[1], '%Y%m%d').date(), dir1.attrib['id'].split('-')[2], dir1.find("alertTime").text.split('T')[1].split('+')[0], dir1.find("title").text, dir1.find("sources").find("source").find("target").find("primaryTarget").find("security").text])
                 #
-                #print(dir1.tag)
+                #writer.writerow([dir1.attrib['id'], dir1.attrib['id'].split('-')[0], datetime.datetime.strptime(dir1.attrib['id'].split('-')[1], '%Y%m%d').date(), dir1.attrib['id'].split('-')[2], dir1.find("alertTime").text.split('T')[1].split('+')[0], dir1.find("title").text, dir1.find("sources").find("source").find("target").find("primaryTarget").find("security").text, dir1.find("participants").find("house").text])
                 #
-                #print(dir1.attrib)
-                #{'id': 'asx-20210730-96'}
+                #print(dir1.find("participants").find("house") is None)
+                #print(dir1.find("participants").find("trader") is None)
+                #print(dir1.find("participants").find("account") is None)
                 #
-                #print(dir1.attrib['id'])
-                #asx-20210730-96
+                if (not(dir1.find("participants").find("trader") is None) and not(dir1.find("participants").find("account") is None)):
+                    #
+                    writer.writerow([dir1.attrib['id'],
+                                     dir1.attrib['id'].split('-')[0],
+                                     datetime.datetime.strptime(dir1.attrib['id'].split('-')[1], '%Y%m%d').date(),
+                                     dir1.attrib['id'].split('-')[2], dir1.find("alertTime").text.split('T')[1].split('+')[0],
+                                     dir1.find("title").text,
+                                     dir1.find("sources").find("source").find("target").find("primaryTarget").find("security").text,
+                                     dir1.find("participants").find("house").text,
+                                     dir1.find("participants").find("trader").text,
+                                     dir1.find("participants").find("account").find("ref").text])
+                    #
+                    #print(dir1.find("participants").find("trader").text)
+                    #
+                elif (not(dir1.find("participants").find("trader") is None) and (dir1.find("participants").find("account") is None)):
+                    #
+                    writer.writerow([dir1.attrib['id'],
+                                     dir1.attrib['id'].split('-')[0],
+                                     datetime.datetime.strptime(dir1.attrib['id'].split('-')[1], '%Y%m%d').date(),
+                                     dir1.attrib['id'].split('-')[2], dir1.find("alertTime").text.split('T')[1].split('+')[0],
+                                     dir1.find("title").text,
+                                     dir1.find("sources").find("source").find("target").find("primaryTarget").find("security").text,
+                                     dir1.find("participants").find("house").text,
+                                     dir1.find("participants").find("trader").text,
+                                     'NA'])
+                    #
+                elif ((dir1.find("participants").find("trader") is None) and not(dir1.find("participants").find("account") is None)):
+                    #
+                    writer.writerow([dir1.attrib['id'],
+                                     dir1.attrib['id'].split('-')[0],
+                                     datetime.datetime.strptime(dir1.attrib['id'].split('-')[1], '%Y%m%d').date(),
+                                     dir1.attrib['id'].split('-')[2], dir1.find("alertTime").text.split('T')[1].split('+')[0],
+                                     dir1.find("title").text,
+                                     dir1.find("sources").find("source").find("target").find("primaryTarget").find("security").text,
+                                     dir1.find("participants").find("house").text,
+                                     'NA',
+                                     dir1.find("participants").find("account").find("ref").text])
+                    #
+                else:
+                    #
+                    writer.writerow([dir1.attrib['id'],
+                                     dir1.attrib['id'].split('-')[0],
+                                     datetime.datetime.strptime(dir1.attrib['id'].split('-')[1], '%Y%m%d').date(),
+                                     dir1.attrib['id'].split('-')[2], dir1.find("alertTime").text.split('T')[1].split('+')[0],
+                                     dir1.find("title").text,
+                                     dir1.find("sources").find("source").find("target").find("primaryTarget").find("security").text,
+                                     dir1.find("participants").find("house").text,
+                                     'NA',
+                                     'NA'])
+                    #
                 #
-                #####
-                #print(dir1.find("participants").find("house").text)
-                #print(dir1.find("participants").find("house").attrib['marketCode'])
+                #print(dir1.find("participants").find("house").text) if (dir1.find("participants").find("house").text) else print('NA')
+                #print(dir1.find("participants").find("trader").text) if (dir1.find("participants").find("trader")) else print('NA')
+                #print(dir1.find("participants").find("account").find("ref").text) if (dir1.find("participants").find("account")) else print('NA')
                 #
-                #print(dir1.find("parameters").find("item").attrib)
-                #print(dir1.find("parameters").find("item").attrib['key'])
-                #print(dir1.find("parameters").find("item").attrib['value'])
-                #
-                #print(dir1.find("attributes").find("item").attrib)
-                #print(dir1.find("attributes").find("item").attrib['key'])
-                #print(dir1.find("attributes").find("item").attrib['value'])
+                #if dir1.find("participants").find("house").text:
+                #    print(dir1.find("participants").find("house").text)
+                #else:
+                #    print("NA")
                 #####
             #
 #
@@ -282,7 +330,7 @@ with open(mkt + '.' + 'all' + '.alerts.csv', 'w', newline='') as f_new:
     #
     ##### adding column names
     writer = csv.writer(f_new)
-    writer.writerow(["alert_id", "market", "date", "alertCount", "time", "title", "security"])
+    writer.writerow(["alert_id", "market", "date", "alertCount", "time", "title", "security", "house"])
     #####
     #
     for f in files:
