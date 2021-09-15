@@ -39,7 +39,7 @@
 # summary.markets.market.csv    -    (market)
 # summary.total.csv    -    (total alert counts for a specific period of time - if you use an example URL above, that covers from 24th July 2021 to 30th July 2021, i.e., 7 = 6+1 calendar days)
 #
-# (market).all.alerts.type.oid.csv    -    An aggregated file for individual alerts with "alert_id", "marketCode", "securityCode", "type", and "oid". If there are multiple oid for a single alert_id, then there will be multiple rows with the same order_id.
+# (market).all.alerts.marketCode.securityCode.type.oid.csv    -    An aggregated file for individual alerts with "alert_id", "marketCode", "securityCode", "type", and "oid". If there are multiple oid for a single alert_id, then there will be multiple rows with the same order_id.
 
 
 
@@ -420,8 +420,8 @@ datelst2 = sorted(datelst2)
 #exit()
 
 
-# Create (market).all.alerts.type.oid.csv
-with open(mkt2 + '.' + 'all' + '.alerts.type.oid.csv', 'w', newline='') as f_new2:
+# Create (market).all.alerts.marketCode.securityCode.type.oid.csv
+with open(mkt2 + '.' + 'all' + '.alerts.marketCode.securityCode.type.oid.csv', 'w', newline='') as f_new2:
     #
     ##### adding column names
     writer2 = csv.writer(f_new2)
