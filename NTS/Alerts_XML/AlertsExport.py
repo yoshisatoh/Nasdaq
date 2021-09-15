@@ -400,7 +400,7 @@ mkt_all_alerts_house_trader_account_ref_security.to_csv(mkt + '.' + 'all' + '.al
 
 #################### AlertsExport/(market)/(yyyymmdd)/alerts.xml [reprise] ####################
 
-########## Creating (market).all.alerts.oid.csv (alert id, message_type, message_oid)
+########## Creating (market).all.alerts.marketCode.securityCode.type.oid.csv (alert id, message_marketCode, message_securityCode, message_type, message_oid)
 
 path2 = './AlertsExport/'
 
