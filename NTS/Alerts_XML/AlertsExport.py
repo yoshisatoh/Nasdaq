@@ -3,7 +3,7 @@
 #  All rights reserved.
 #
 # Created:      2021/08/26
-# Last Updated: 2021/09/03
+# Last Updated: 2021/09/15
 #
 # Github:
 # https://github.com/yoshisatoh/nasdaq/tree/main/NTS/Alerts_XML/AlertsExport.py
@@ -38,6 +38,8 @@
 # summary.markets.csv    -    (market), (yyyymmdd), (total alert counts per calendar day)
 # summary.markets.market.csv    -    (market)
 # summary.total.csv    -    (total alert counts for a specific period of time - if you use an example URL above, that covers from 24th July 2021 to 30th July 2021, i.e., 7 = 6+1 calendar days)
+#
+# (market).all.alerts.type.oid.csv    -    An aggregated file for individual alerts with "alert_id", "marketCode", "securityCode", "type", and "oid". If there are multiple oid for a single alert_id, then there will be multiple rows with the same order_id.
 
 
 
@@ -392,4 +394,59 @@ mkt_all_alerts_house_account_ref.to_csv(mkt + '.' + 'all' + '.alerts.counts.hous
 mkt_all_alerts_house_trader_account_ref_security = pd.DataFrame(mkt_all_alerts.groupby(['house', 'trader', 'account_ref','security']).size())
 mkt_all_alerts_house_trader_account_ref_security.rename(columns={0: 'alerts'}, inplace=True)
 mkt_all_alerts_house_trader_account_ref_security.to_csv(mkt + '.' + 'all' + '.alerts.counts.house.trader.account_ref.security.csv', header=True, index=True)
+
+
+
+
+#################### AlertsExport/(market)/(yyyymmdd)/alerts.xml [reprise] ####################
+
+########## Creating (market).all.alerts.oid.csv (alert id, message_type, message_oid)
+
+path2 = './AlertsExport/'
+
+files_dir2a = os.listdir(path2)
+mkt2 = [f2a for f2a in files_dir2a if os.path.isdir(os.path.join(path2, f2a))][0]
+print(mkt2)
+#exit()
+
+
+files_dir2b = os.listdir(path2 + mkt2 + '/')
+datelst2 = [f2b for f2b in files_dir2b if os.path.isdir(os.path.join(path2 + mkt2 + '/', f2b))]
+#print(datelst2)
+#print(type(datelst2))
+#print(sorted(datelst2))
+datelst2 = sorted(datelst2)
+#print(datelst2)
+#exit()
+
+
+# Create (market).all.alerts.type.oid.csv
+with open(mkt2 + '.' + 'all' + '.alerts.type.oid.csv', 'w', newline='') as f_new2:
+    #
+    ##### adding column names
+    writer2 = csv.writer(f_new2)
+    writer2.writerow(["alert_id", "marketCode", "securityCode", "type", "oid"])
+    #
+    for n in range(len(datelst)):
+        #
+        print(str(datelst[n]))
+        tree2 = ET.parse('AlertsExport/' + mkt2 + '/' + str(datelst[n]) + '/alerts.xml')
+        #
+        root2 = tree2.getroot()
+        #
+        for alert in root2.findall('alert'):
+            #
+            for message in alert.iter('message'):
+                #
+                #print(message.get('oid'))
+                #print("alert: " + alert.get('id') + ", oid: " + message.get('oid'))
+                writer2.writerow([alert.get('id'), message.get('marketCode'), message.get('securityCode'), message.get('type'), message.get('oid')])
+                #
+            #
+        #
+    #
+#
+#print(f_new2.closed)
+#True
+
 
