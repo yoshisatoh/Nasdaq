@@ -6,7 +6,7 @@
 # Last Updated: 2021/09/15
 #
 # Github:
-# https://github.com/yoshisatoh/nasdaq/tree/main/NTS/Alerts_XML/AlertsExport.py
+# https://github.com/yoshisatoh/Nasdaq/tree/main/NTS/Alerts_XML/AlertsExport.py
 #
 #
 # Notes:
