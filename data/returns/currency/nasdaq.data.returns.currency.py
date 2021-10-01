@@ -13,7 +13,7 @@
 #
 ########## Input Data Files
 #
-# You have to create a text file (api_key.txt) with only one line of Quandl' API key in it, and then save it on the same direcoty with this script (data.nasdaq.currency.returns.py)
+# You have to create a text file (api_key.txt) with only one line of Quandl's API key in it, and then save it on the same direcoty with this script (data.nasdaq.currency.returns.py)
 #api_key.txt
 #
 # You do not need other input files as this program gets data from Nasdaq via the Internet by using the Quandl API key above.
