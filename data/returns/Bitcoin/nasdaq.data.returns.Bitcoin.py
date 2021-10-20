@@ -167,7 +167,7 @@ df_BTC_price_volume = pd.merge(df_BTC_price, df_BTC_volume, on='Date', how='oute
 df_BTC_price_volume.sort_index(axis=0, ascending=True, inplace=True, na_position='last', ignore_index=False)
 
 
-print(df_BTC_price_volume.index)
+#print(df_BTC_price_volume.index)
 '''
 DatetimeIndex(['2009-01-02', '2009-01-03', '2009-01-04', '2009-01-05',
                '2009-01-06', '2009-01-07', '2009-01-08', '2009-01-09',
@@ -180,7 +180,7 @@ DatetimeIndex(['2009-01-02', '2009-01-03', '2009-01-04', '2009-01-05',
 '''
 
 
-print(df_BTC_price_volume.columns)
+#print(df_BTC_price_volume.columns)
 #Index(['Price', 'Volume'], dtype='object')
 
 #Drop rows when one or more columns have NaN.
