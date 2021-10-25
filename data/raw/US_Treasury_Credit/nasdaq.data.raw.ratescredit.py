@@ -294,7 +294,24 @@ plt.figure(figsize=(16,8))
 #plt.plot(df.index.values, df[str(sys.argv[2])], label=str(sys.argv[2]))
 #plt.plot(df_AAA.index.values, df["AAA"], label="AAA")
 
-plt.plot(df2.index.values, df2, label=df2.columns)
+'''
+print(df2.columns)    #Index(['5 YR', 'AAA', 'AA', 'BBB', 'HY'], dtype='object')
+print(type(df2.columns))    #<class 'pandas.core.indexes.base.Index'>
+print(df2.columns[0])    #5 YR
+print(list(df2.columns))
+exit()
+'''
+
+
+#plt.plot(df2.index.values, df2, label=df2.columns)
+#plt.plot(df2.index.values, df2, label=list(df2.columns))
+#
+plt.plot(df2.index.values, df2[str(sys.argv[2])], label=list(df2.columns)[0])
+plt.plot(df2.index.values, df2['AAA'], label=list(df2.columns)[1])
+plt.plot(df2.index.values, df2['AA'],  label=list(df2.columns)[2])
+plt.plot(df2.index.values, df2['BBB'], label=list(df2.columns)[3])
+plt.plot(df2.index.values, df2['HY'],  label=list(df2.columns)[4])
+
 
 plt.legend(loc="upper right", ncol=1)
 
