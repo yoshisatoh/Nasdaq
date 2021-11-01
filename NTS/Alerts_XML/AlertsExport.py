@@ -236,7 +236,7 @@ for n in range(len(datelst)):
                 #
             else:
                 #
-                # 1. both trader and account/ref are available
+                # 1. both trader and account(_ref) are available
                 #
                 if (not(dir1.find("participants").find("trader") is None) and not(dir1.find("participants").find("account") is None)):
                     #
@@ -251,7 +251,7 @@ for n in range(len(datelst)):
                                      dir1.find("participants").find("account").find("ref").text])
                     #
                 #
-                # 2. trader is available and account is NOT available
+                # 2. trader is available and account(_ref) is NOT available
                 #
                 elif (not(dir1.find("participants").find("trader") is None) and (dir1.find("participants").find("account") is None)):
                     #
@@ -266,7 +266,7 @@ for n in range(len(datelst)):
                                      'NA'])
                     #
                 #
-                # 3. trader is NOT available and account is available
+                # 3. trader is NOT available and account(_ref) is available
                 #
                 elif ((dir1.find("participants").find("trader") is None) and not(dir1.find("participants").find("account") is None)):
                     #
@@ -281,7 +281,7 @@ for n in range(len(datelst)):
                                      dir1.find("participants").find("account").find("ref").text])
                     #
                 #
-                # 4. NEITHER trader nor account/ref is available
+                # 4. NEITHER trader nor account(_ref) is available
                 #
                 else:
                     #
