@@ -281,7 +281,22 @@ for n in range(len(datelst)):
                                      dir1.find("participants").find("account").find("ref").text])
                     #
                 #
-                # 4. NEITHER trader nor account(_ref) is available
+                # 4. NEITHER trader nor account(_ref) is available; also, security is NOT available
+                #
+                elif (dir1.find("sources").find("source").find("target").find("primaryTarget") is None):    #there is a </target> tag, but no underlying tags such as primaryTarget
+                    #
+                    writer.writerow([dir1.attrib['id'],
+                                     dir1.attrib['id'].split('-')[0],
+                                     datetime.datetime.strptime(dir1.attrib['id'].split('-')[1], '%Y%m%d').date(),
+                                     dir1.attrib['id'].split('-')[2], dir1.find("alertTime").text.split('T')[1].split('+')[0],
+                                     dir1.find("title").text,
+                                     'NA',
+                                     dir1.find("participants").find("house").text,
+                                     'NA',
+                                     'NA'])
+                    #
+                #
+                # 5. NEITHER trader nor account(_ref) is available; but, security is available
                 #
                 else:
                     #
