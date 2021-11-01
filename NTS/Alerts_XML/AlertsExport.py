@@ -13,6 +13,8 @@
 #
 # First off, download an AlertsExport.zip file from a Nasdaq Trade Surveillance website for your company.
 # For example, you can downloade a zip file if you replace <yourorganisation> with your company's specific ID.
+# marketCode has to be a single market(asx in this example), not a meta cross market (e.g., australia).
+# https://<yourorganisation>.smartsbroker.com/cmss/citadel/exportAlerts?marketCode=asx&date=20210730&bundle=true&apiVersion=8
 # https://<yourorganisation>.smartsbroker.com/cmss/citadel/exportAlerts?marketCode=asx&date=20210730&bundle=true&apiVersion=8&lookbackDays=6
 #
 # Second, unzip the AlertsExport.zip file on your computer. An AlertsExport directory will be created.
