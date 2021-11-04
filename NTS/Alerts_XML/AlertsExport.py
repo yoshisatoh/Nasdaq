@@ -3,7 +3,7 @@
 #  All rights reserved.
 #
 # Created:      2021/08/26
-# Last Updated: 2021/11/01
+# Last Updated: 2021/11/04
 #
 # Github:
 # https://github.com/yoshisatoh/Nasdaq/tree/main/NTS/Alerts_XML/AlertsExport.py
@@ -358,7 +358,8 @@ with open(mkt + '.' + 'all' + '.alerts.csv', 'w', newline='') as f_new:
 #
 mkt_all_alerts = pd.read_csv(mkt + '.' + 'all' + '.alerts.csv')
 #
-mkt_all_alerts = mkt_all_alerts.sort_values(by=["date", "alertCount"], ascending=[True, True])
+#mkt_all_alerts = mkt_all_alerts.sort_values(by=["date", "alertCount"], ascending=[True, True])
+mkt_all_alerts = mkt_all_alerts.sort_values(by=["market", "date", "alertCount"], ascending=[True, True, True])
 #
 # Overwrite (mkt).all.alerts.csv
 mkt_all_alerts.to_csv(mkt + '.' + 'all' + '.alerts.csv', index=False)
