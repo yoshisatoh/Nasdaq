@@ -3,7 +3,7 @@
 #  All rights reserved.
 #
 # Created:      2021/08/26
-# Last Updated: 2021/11/04
+# Last Updated: 2021/11/05
 #
 # Github:
 # https://github.com/yoshisatoh/Nasdaq/tree/main/NTS/Alerts_XML/AlertsExport.py
@@ -13,7 +13,7 @@
 #
 # First off, download an AlertsExport.zip file from a Nasdaq Trade Surveillance website for your company.
 # For example, you can downloade a zip file if you replace <yourorganisation> with your company's specific ID.
-# marketCode has to be a single market(asx in this example), not a meta cross market (e.g., australia).
+# marketCode can be a single market(asx in this example) or a cross/meta market (e.g., australia, australiad).
 # https://<yourorganisation>.smartsbroker.com/cmss/citadel/exportAlerts?marketCode=asx&date=20210730&bundle=true&apiVersion=8
 # https://<yourorganisation>.smartsbroker.com/cmss/citadel/exportAlerts?marketCode=asx&date=20210730&bundle=true&apiVersion=8&lookbackDays=6
 #
